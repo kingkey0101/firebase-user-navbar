@@ -1,7 +1,15 @@
 import React from "react";
 import "./App.css";
 import { auth, db } from "./firebase/init";
-import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -12,13 +20,17 @@ import Nav from "./firebase/Nav";
 
 //register user
 function App() {
+  const [user, setUser] = React.useState({});
+
   //adding post to DataBase(adding document)
   function createPost() {
     const post = {
-      title: "Land a $400k job",
-      description: "Finish Frontend Simplified",
+      title: "Finish Firebase",
+      description: "Do Frontend Simplified",
+      uid: user.id,
     };
-    addDoc(collection(db, "posts"), post);
+   
+    addDoc(collection(db, "posts"), post,);
   }
 
   //Read all posts(shown on screen)
@@ -36,7 +48,7 @@ function App() {
 
     const postRef = doc(db, "posts", hardcodedID);
     const postSnap = await getDoc(postRef);
-    
+
     //only show if exists
     if (postSnap.exists()) {
       const post = postSnap.data();
